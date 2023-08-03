@@ -1,0 +1,60 @@
+# Use for mac
+version: '3.8'
+
+services:
+    nginx:
+        volumes:
+            - code:${WORK_DIR}
+
+    # httpd:
+    #     volumes:
+    #         - code:${WORK_DIR}
+
+    php:
+        volumes:
+            - code:${WORK_DIR}
+
+    cli:
+        volumes:
+            - code:${WORK_DIR}
+
+    # browser-sync:
+    #     volumes:
+    #         - code:/src
+
+volumes:
+    code:
+
+x-mutagen:
+    sync:
+        defaults:
+            mode: two-way-resolved
+            symlink:
+                mode: posix-raw
+            ignore:
+                vcs: false
+                paths:
+                    - .DS_Store
+                    - ._*
+                    - "*~"
+                    - "*.sw[a-p]"
+                    - .idea
+                    - .vscode
+                    - node_modules
+                    - var/cache
+                    - var/page_cache
+                    - var/session
+                    - var/composer_home
+                    - pub/media/catalog/product/cache
+                    - pub/media/captcha
+                    - docker/data
+        code:
+            alpha: '${WORK_DIR}'
+            beta: 'volume://code'
+            permissions:
+                defaultDirectoryMode: 0755
+                defaultFileMode: 0644
+            configurationBeta:
+                permissions:
+                    defaultOwner: 'id:${DOCKER_UID:-1000}'
+                    defaultGroup: 'id:${DOCKER_GID:-1000}'
